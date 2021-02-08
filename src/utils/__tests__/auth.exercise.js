@@ -1,21 +1,25 @@
-// Testing Pure Functions
+const {isPasswordAllowed} = require('utils/auth')
 
-// 💣 remove this todo test (it's only here so you don't get an error about missing tests)
-test.todo('remove me')
+describe('isPasswordAllowed', () => {
+  const allowedPasswords = ['!aBc123']
+  const disallowedPasswords = [
+    'a2c!',
+    '123456!',
+    'ABCdef!',
+    'abc123!',
+    'ABC123!',
+    'ABCdef123',
+  ]
 
-// 🐨 import the function that we're testing
-// 💰 import {isPasswordAllowed} from '../auth'
+  allowedPasswords.forEach((password) =>
+    test(`Allows ${password}`, () => {
+      expect(isPasswordAllowed(password)).toBe(true)
+    }),
+  )
 
-// 🐨 write tests for valid and invalid passwords
-// 💰 here are some you can use:
-//
-// valid:
-// - !aBc123
-//
-// invalid:
-// - a2c! // too short
-// - 123456! // no alphabet characters
-// - ABCdef! // no numbers
-// - abc123! // no uppercase letters
-// - ABC123! // no lowercase letters
-// - ABCdef123 // no non-alphanumeric characters
+  disallowedPasswords.forEach((password) =>
+    test(`Disallows is ${password}`, () => {
+      expect(isPasswordAllowed(password)).toBe(false)
+    }),
+  )
+})
