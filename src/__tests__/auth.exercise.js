@@ -21,16 +21,16 @@ beforeEach(() => resetDb())
 
 // 🐨 beforeEach test in this file we want to reset the database
 
+const baseURL = 'http://localhost:8000/api'
+const api = axios.create({baseURL})
+
 test('auth flow', async () => {
   const {username, password} = generate.loginForm()
 
-  const registerResult = await axios.post(
-    'http://localhost:8000/api/auth/register',
-    {
-      username,
-      password,
-    },
-  )
+  const registerResult = await api.post('/auth/register', {
+    username,
+    password,
+  })
 
   expect(registerResult.data.user).toEqual({
     username,
@@ -39,7 +39,7 @@ test('auth flow', async () => {
   })
 
   // login
-  const loginResult = await axios.post('http://localhost:8000/api/auth/login', {
+  const loginResult = await api.post('/auth/login', {
     username,
     password,
   })
@@ -51,7 +51,7 @@ test('auth flow', async () => {
   })
 
   // authenticated request
-  const userResult = await axios.get('http://localhost:8000/api/auth/me', {
+  const userResult = await api.get('/auth/me', {
     headers: {
       Authorization: `Bearer ${loginResult.data.user.token}`,
     },
